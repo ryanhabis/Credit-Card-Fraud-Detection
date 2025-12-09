@@ -65,7 +65,7 @@
 
 ---
 
-## 🤖 **SLIDE 7: The Machine Learning Model**
+## 🤖 **SLIDE 7: The Model**
 **Logistic Regression Results:**
 
 **🎯 Model Performance:**

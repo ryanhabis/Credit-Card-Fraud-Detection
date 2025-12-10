@@ -16,7 +16,7 @@
 
 ---
 
-## 🔍 **SLIDE 3: Our Three Key Questions**
+## 🔍 **SLIDE 6: Our Three Key Questions**
 **We tested three hypotheses:**
 
 1. **💰 Do fraud amounts differ from normal transactions?**
@@ -27,7 +27,7 @@
 
 ---
 
-## ✅ **SLIDE 4: What We Found (Quick Answers)**
+## ✅ **SLIDE 6: What We Found (Quick Answers)**
 **Spoiler Alert - Here's what we discovered:**
 
 1. **✅ YES** - Fraud transactions are €35 HIGHER on average
@@ -38,7 +38,44 @@
 
 ---
 
-## 📈 **SLIDE 5: The Money Story (H1)**
+## 🕒 **SLIDE 10: The Time Pattern (H2)**
+**Fraud Has a Schedule:**
+
+**📅 Daily Fraud Pattern:**
+- **Starts:** 1-2 AM
+- **Peaks:** **11 AM** (highest fraud activity)
+- **Pattern:** Clear daily cycle
+
+*Presenter Notes: Fraudsters have working hours too! This pattern is consistent and reliable.*
+
+---
+
+## 🏆 **SLIDE 12: Top Fraud Predictors**
+**Our Fraud Detection Superstars:**
+
+**🥇 #1 Predictor: V14** (Strongest signal)
+**🥈 #2 Predictor: V12** (Close second)
+
+**Key Insight:** These are PCA components - engineered features that capture spending patterns we can't see directly.
+
+*Presenter Notes: These are like "financial fingerprints" - patterns in the data that signal fraud.*
+
+---
+
+## 🤖 **SLIDE 15: The Model**
+**Logistic Regression Results:**
+
+**🎯 Model Performance:**
+- **Catches 84% of fraud** (Good!)
+- **But...** has 91% false alarm rate (Bad!)
+- **Precision:** Only 9% of flagged transactions are actual fraud
+
+*Presenter Notes: The model is like an over-zealous security guard - catches most thieves but bothers lots of innocent customers.*
+
+
+---
+
+## 📈 **SLIDE 16: The Money Story (H1)**
 **Fraud Amounts ARE Different:**
 
 | Transaction Type | Average Amount |
@@ -53,42 +90,6 @@
 
 ---
 
-## 🕒 **SLIDE 6: The Time Pattern (H2)**
-**Fraud Has a Schedule:**
-
-**📅 Daily Fraud Pattern:**
-- **Starts:** 1-2 AM
-- **Peaks:** **11 AM** (highest fraud activity)
-- **Pattern:** Clear daily cycle
-
-*Presenter Notes: Fraudsters have working hours too! This pattern is consistent and reliable.*
-
----
-
-## 🤖 **SLIDE 7: The Model**
-**Logistic Regression Results:**
-
-**🎯 Model Performance:**
-- **Catches 84% of fraud** (Good!)
-- **But...** has 91% false alarm rate (Bad!)
-- **Precision:** Only 9% of flagged transactions are actual fraud
-
-*Presenter Notes: The model is like an over-zealous security guard - catches most thieves but bothers lots of innocent customers.*
-
----
-
-## 🏆 **SLIDE 8: Top Fraud Predictors**
-**Our Fraud Detection Superstars:**
-
-**🥇 #1 Predictor: V14** (Strongest signal)
-**🥈 #2 Predictor: V12** (Close second)
-
-**Key Insight:** These are PCA components - engineered features that capture spending patterns we can't see directly.
-
-*Presenter Notes: These are like "financial fingerprints" - patterns in the data that signal fraud.*
-
----
-
 ## 🔗 **SLIDE 9: What Doesn't Work**
 **Surprise Finding:**
 
@@ -98,10 +99,78 @@
 
 *Presenter Notes: This is why simple rules like "flag large transactions" don't work well.*
 
+
+
+---------------------------------------------------------------------------------------------------------------------------
+Let me explain this **ANOVA table** in the simplest way possible — no statistics jargon.
+
 ---
 
-## 📊 **SLIDE 10: The Big Picture**
-**Putting It All Together:**
+## 🎯 **What ANOVA Is Testing**
+You’re checking:  
+**"Do different transaction sizes (Small, Medium, Large, Very Large) have different V1 values?"**  
+V1 is the most important PCA component in your dataset.
+
+---
+
+## 📊 **The Table Explained Simply:**
+
+| Column | Your Value | What It Means in Plain English |
+|--------|------------|--------------------------------|
+| **Source** | Between Groups | Differences **between** your 4 amount categories |
+| **Sum of Squares** | 39,721.22 | How much "spread" or variation comes from **category differences** |
+| **df** | 3 | You have **4 categories**, so degrees of freedom = 4 - 1 = 3 |
+| **F-statistic** | 3630.85 | **Huge number** → Categories are VERY different from each other |
+| **P-value** | < 0.0001 | **Less than 0.01% chance** this is random → Result is REAL |
+
+---
+
+## 🧮 **Breaking Down the Numbers:**
+
+### 1. **F-statistic = 3630.85**
+- This is your **"difference score"**
+- **Rule:** If F > 10 → Strong evidence of real differences
+- **Yours is 3630** → **Extremely strong evidence**
+- Means: The difference **between categories** is **3630 times larger** than random noise
+
+### 2. **P-value < 0.0001**
+- Probability this result happened **by random chance**
+- **< 0.0001** = **Less than 0.01% chance** it's random
+- **Translation:** You're **99.99% confident** the categories truly differ
+
+### 3. **Sum of Squares**
+- **Between Groups: 39,721** → Variation from category differences
+- **Within Groups: 1,028,040** → Natural variation inside each category
+- **Even though** Within is bigger, Between is still **big enough** to be meaningful
+
+---
+
+## 🗣️ **How to Explain This in Your Presentation:**
+
+> "We tested whether **Small, Medium, Large, and Very Large** transactions have different V1 values.  
+> The **F-statistic of 3630** tells us these groups are **extremely different** — like comparing apples, oranges, bananas, and watermelons.  
+> With a **P-value under 0.0001**, we're **over 99.99% confident** this isn't random — transaction size **really does affect** the V1 pattern."
+
+---
+
+## 📌 **One-Sentence Summary:**
+
+**"ANOVA proves that small, medium, large, and very large transactions have statistically different V1 patterns (F = 3630, p < 0.0001)."**
+
+---
+
+## 🔗 **Why This Matters for Fraud Detection:**
+
+Since **V1 is your primary PCA component**, this means:
+- Small purchases have **one V1 pattern**
+- Large purchases have **a different V1 pattern**
+- Fraud might **look different** depending on transaction size
+
+---
+
+Would you like me to create a **simple diagram** showing how the four categories differ, or explain **how to interpret the F-statistic** more visually?
+
+---------------------------------------------------------------------------------------------------------------------------
 
 **What Matters for Fraud Detection:**
 1. **📊 PCA Components** (V14, V12) - Your best friends

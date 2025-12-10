@@ -240,4 +240,228 @@ Would you like me to create a **simple diagram** showing how the four categories
 
 ---
 
-**GOOD LUCK! 🍀** Remember: You're telling a story of discovery, not just presenting numbers.
+🧮 Mathematical Explanations of Statistical Tests for Credit Card Fraud Detection
+
+📊 Three Statistical Tests Explained Mathematically
+
+This document explains the mathematical mechanics behind the three key statistical tests used in the credit card fraud detection analysis:
+
+1. Two-Sample T-Test - Comparing fraud vs legitimate transaction amounts
+2. Logistic Regression - Predicting fraud probability
+3. One-Way ANOVA - Comparing multiple transaction size categories
+
+---
+
+1. Two-Sample T-Test: Comparing Two Group Means
+
+Mathematical Objective
+
+Test whether the means of two independent groups (fraudulent vs legitimate transactions) are statistically different.
+
+Formula
+
+t = \frac{\bar{X}_1 - \bar{X}_2}{s_p \cdot \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}
+
+Where:
+
+· \bar{X}_1 = mean of fraudulent transactions = €123.87
+· \bar{X}_2 = mean of legitimate transactions = €88.41
+· s_p = pooled standard deviation (combines variability of both groups)
+· n_1 = sample size of fraud transactions = 473
+· n_2 = sample size of legitimate transactions = 283,253
+
+Your Results
+
+t = \frac{123.87 - 88.41}{\text{pooled spread}} = -2.961
+
+Negative sign indicates: Fraud mean > Legitimate mean
+
+P-value Interpretation
+
+· P-value = 0.0032
+· This means: 0.32% probability of observing |t| \geq 2.961 if the population means were actually equal
+· Calculated from the t-distribution with appropriate degrees of freedom
+· Conclusion: Reject the null hypothesis (means are different)
+
+Statistical Significance
+
+· Significant at p < 0.01
+· Confidence level: > 99% that the difference is real, not random
+
+---
+
+2. Logistic Regression: Binary Classification Model
+
+Mathematical Objective
+
+Predict the probability P(\text{Fraud}) that a transaction is fraudulent based on input features.
+
+Core Formula (Sigmoid Function)
+
+P(\text{Fraud}) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_n X_n)}}
+
+Where:
+
+· \beta_0 = -2.3721 (intercept) → Baseline log-odds
+· \beta_1 = -0.8647 for V14 → Strongest predictor
+· \beta_2 = -0.7565 for V12 → Second strongest predictor
+· \beta_3 = 0.2167 for V17 → Positive predictor (unusual)
+· e = Euler's number (≈ 2.71828)
+
+Coefficient Interpretation
+
+· Negative β: Higher feature value = Lower fraud probability
+· Positive β: Higher feature value = Higher fraud probability
+· Magnitude: Strength of relationship
+
+Performance Metrics Formulas
+
+Metric Formula Your Value Interpretation
+Accuracy \frac{TP + TN}{TP + TN + FP + FN} 0.980 (98.0%) Correct predictions / Total
+Recall \frac{TP}{TP + FN} 0.843 (84.3%) Fraud found / All actual fraud
+Precision \frac{TP}{TP + FP} 0.092 (9.2%) True fraud / All flagged as fraud
+F1-Score 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} 0.166 Harmonic mean of precision & recall
+
+Where:
+
+· TP = True Positives (fraud correctly identified)
+· TN = True Negatives (legit correctly identified)
+· FP = False Positives (legit flagged as fraud)
+· FN = False Negatives (fraud missed)
+
+---
+
+3. One-Way ANOVA: Comparing Multiple Group Means
+
+Mathematical Objective
+
+Test whether the means of 4+ groups (transaction size categories) are statistically different.
+
+Variance Partitioning Concept
+
+Total Variation = Variation Between Groups + Variation Within Groups
+
+Key Formulas
+
+1. Sum of Squares Between (SSB)
+
+SSB = \sum_{i=1}^{k} n_i (\bar{X}_i - \bar{X}_{\text{total}})^2
+
+· Measures how much group means differ from overall mean
+· Your value: 39,721.22
+
+2. Sum of Squares Within (SSW)
+
+SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (X_{ij} - \bar{X}_i)^2
+
+· Measures how much individual points differ from their group mean
+· Your value: 1,028,040.00
+
+3. Degrees of Freedom
+
+· Between groups: df_B = k - 1 = 4 - 1 = 3
+· Within groups: df_W = N - k = 283,726 - 4 = 283,722 (≈ 281,914 after cleaning)
+
+4. Mean Squares
+
+MSB = \frac{SSB}{df_B} = \frac{39,721.22}{3} = 13,240.41
+
+
+
+MSW = \frac{SSW}{df_W} = \frac{1,028,040.00}{281,914} ≈ 3.65
+
+5. F-statistic
+
+F = \frac{MSB}{MSW} = \frac{13,240.41}{3.65} = 3,630.85
+
+Interpretation
+
+· F = 3,630.85: Between-group variance is 3,630× larger than within-group variance
+· Expected if null true: F ≈ 1 (similar variance between and within)
+· Your result: Extreme evidence against null hypothesis
+
+P-value < 0.0001
+
+· Probability of observing F \geq 3,630.85 if all group means were equal
+· Calculated from F-distribution with (3, 281,914) degrees of freedom
+· Virtually impossible by chance → Groups are statistically different
+
+---
+
+🎯 Transaction Categories for ANOVA
+
+Category Range (€) Sample Size Description
+Small < 50 192,415 Frequent, low-value transactions
+Medium 50-200 69,238 Moderate everyday purchases
+Large 200-1000 19,574 High-value purchases
+Very Large > 1000 2,499 Exceptional/luxury transactions
+
+---
+
+🔗 Mathematical Connections Between Tests
+
+Hierarchical Analysis Approach:
+
+1. T-test → Compare 2 groups (fraud vs legit)
+   · Tests: H_0: \mu_{\text{fraud}} = \mu_{\text{legit}}
+   · Result: Reject H_0 (p = 0.0032)
+2. ANOVA → Compare 4+ groups (transaction sizes)
+   · Tests: H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4
+   · Result: Reject H_0 (p < 0.0001)
+3. Logistic Regression → Predict probability
+   · Uses patterns found in 1 & 2 to build predictive model
+   · Maps feature space to probability via sigmoid function
+
+Statistical Flow:
+
+```
+Descriptive → Comparative → Predictive
+(Explore)   → (T-test/ANOVA) → (Logistic Regression)
+```
+
+---
+
+📈 Why This Mathematical Approach Works
+
+1. T-test: Quantifies difference magnitude with t-statistic and confidence with p-value
+2. ANOVA: Extends comparison to multiple groups using variance ratios
+3. Logistic Regression: Transforms linear combinations into probabilities via sigmoid
+
+Key Mathematical Insights:
+
+· Effect Size: €35.46 mean difference (practical significance)
+· Statistical Significance: p < 0.01 (mathematical confidence)
+· Predictive Power: 84.3% recall but 9.2% precision (trade-off)
+· Group Differences: F = 3,630.85 (extremely distinct categories)
+
+---
+
+🧠 Practical Mathematical Takeaways
+
+Mathematical Concept Applied Insight Business Implication
+Mean Difference (€35.46) Fraud amounts are higher Set threshold alerts
+Negative Coefficients (V14, V12) Low values = high fraud risk Monitor these PCA components
+High F-statistic (3630.85) Transaction sizes matter Customize rules by amount
+Low Precision (9.2%) Many false positives Balance detection vs customer experience
+
+---
+
+📚 Further Mathematical Notes
+
+Assumptions Met:
+
+1. T-test: Independent samples, approximately normal distributions (valid with large n)
+2. ANOVA: Independence, normality, homogeneity of variance (reasonable with large samples)
+3. Logistic Regression: Linear relationship in log-odds, independent observations
+
+Limitations Considered:
+
+· Class imbalance affects accuracy metric
+· Large sample sizes make even small differences statistically significant
+· PCA components are anonymized, limiting interpretability
+
+---
+
+File saved as: statistical_tests_explanation.md
+
+Would you like me to add code implementations, visual formulas, or interactive elements to this markdown file?
